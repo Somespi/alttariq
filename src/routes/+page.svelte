@@ -10,13 +10,18 @@
         goto('/explore');
     }
 </script>
-
-<div class="flex flex-col items-center justify-center content-center h-screen w-screen">
-	<div class="flex flex-col gap-y-16">
-		<DropDownSelect bind:selected={selectedGrade} options={grades}/>
-        <button class="btn btn-primary" disabled={selectedGrade == "Unselected"} on:click={transitionToNextPage}>
-            Explore the Sky
-        </button>
-	</div>
+<div class="flex flex-col  h-screen w-screen">
+    <div class="w-full flex-row top-0 justify-around">
+        <h1 class="p-3">At-Tariq Explorer</h1>
+        
+    </div>
+    <div class="flex-1 flex flex-col justify-center items-center content-center">
+        <div class="flex flex-col gap-y-16">
+            <DropDownSelect bind:selected={selectedGrade} options={grades}/>
+            <button class="btn btn-primary" disabled={selectedGrade == "Unselected"} on:click={transitionToNextPage}>
+                Explore the Sky
+            </button>
+        </div>
+    </div>
 
 </div>
