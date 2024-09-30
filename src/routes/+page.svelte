@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-    import DropDownSelect from './DropDownSelect.svelte';
+    import DropDownSelect from '../lib/DropDownSelect.svelte';
 
 	$: selectedGrade = 'Unselected';
 	let grades: string[] = ['Elementary', 'Middle-School', 'High-School', 'College'];
