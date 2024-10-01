@@ -7,5 +7,8 @@ export default {
 		extend: {}
 	},
 
+	daisyui: {
+		themes: ['luxury']
+	},
 	plugins: [require('@tailwindcss/typography'), require('daisyui')],
 } as Config;
