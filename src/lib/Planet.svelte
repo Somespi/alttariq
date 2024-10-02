@@ -49,7 +49,7 @@
 
 			const loader = new EXRLoader();
 			loader.load(
-				'/skybox/Milkyway.exr',
+				'https://sapphire-voluntary-gecko-251.mypinata.cloud/ipfs/QmZv3Z6YC8yKLz2AWrVYgGmVWEwbwGSSXRTBjFxiCQ7uXx',
 				(texture, _) => {
 					const envMap = pmremGenerator.fromEquirectangular(texture).texture;
 
@@ -84,7 +84,7 @@
 			planet_created = true;
 			const geometry = new THREE.SphereGeometry(20 * 2.3, 64, 64); 
 			const textureLoader = new THREE.TextureLoader();
-			const texture = textureLoader.load(`/planets/${planet.name}.jpg`); 
+			const texture = textureLoader.load(planet.resource); 
 
 			const material = new THREE.MeshStandardMaterial({
 				map: texture, 

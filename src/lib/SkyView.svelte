@@ -50,7 +50,7 @@
 
 			const loader = new EXRLoader();
 			loader.load(
-				'/skybox/Milkyway.exr',
+				'https://sapphire-voluntary-gecko-251.mypinata.cloud/ipfs/QmZv3Z6YC8yKLz2AWrVYgGmVWEwbwGSSXRTBjFxiCQ7uXx',
 				(texture) => {
 					const envMap = pmremGenerator.fromEquirectangular(texture).texture;
 					scene.background = scene.environment = envMap;
@@ -116,11 +116,11 @@
 				let planet;
 
 				if (planetprops.ismodel) {
-					const gltf = await gltfLoader.loadAsync(`/models/${planetprops.name}.glb`);
+					const gltf = await gltfLoader.loadAsync(planetprops.resource);
 					planet = gltf.scene;
 					planet.scale.set(0.05, 0.05, 0.05);
 				} else {
-					const texture = textureLoader.load(`/planets/${planetprops.name}.jpg`);
+					const texture = textureLoader.load(planetprops.resource);
 					const material = new THREE.MeshStandardMaterial({ map: texture, metalness: 0.1, roughness: 0.5 });
 					planet = new THREE.Mesh(planetGeometry, material);
 				}

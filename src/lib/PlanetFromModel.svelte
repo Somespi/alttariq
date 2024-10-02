@@ -51,7 +51,7 @@
 
 			const loader = new EXRLoader();
 			loader.load(
-				'/skybox/Milkyway.exr',
+				'https://sapphire-voluntary-gecko-251.mypinata.cloud/ipfs/QmZv3Z6YC8yKLz2AWrVYgGmVWEwbwGSSXRTBjFxiCQ7uXx',
 				(texture, _) => {
 					const envMap = pmremGenerator.fromEquirectangular(texture).texture;
 
@@ -86,7 +86,7 @@
 			planet_created = true;
 			const loader = new GLTFLoader();
 			loader.load(
-				`/models/${planet.name}.glb`,
+				planet.resource,
 				(gltf) => {
 					const model = gltf.scene;
 					model.scale.set(0.08, 0.08, 0.08);

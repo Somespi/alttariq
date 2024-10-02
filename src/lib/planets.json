@@ -6,6 +6,7 @@
         "z": 9,
         "color": "0x33ffee",
         "name": "Kepler-22b",
+        "resource": "https://sapphire-voluntary-gecko-251.mypinata.cloud/ipfs/QmRXvwwbKVhCicTRHhThMe2q57bck4TQJbdFiVSEKNLJ1e",
         "nasa_data": {
             "mass_earth_compared": "<9.1",
             "radius_earth_compared": "2.10±0.12",
@@ -29,6 +30,7 @@
         "z": 23,
         "color": "0xffcc00",
         "name": "Kepler-62b",
+        "resource": "https://sapphire-voluntary-gecko-251.mypinata.cloud/ipfs/Qmdi9vR5GapHfYUuWbt6X6HEqTnZ53KfrwGwvrYy4C5rja",
         "nasa_data": {
             "mass_earth_compared": "<9",
             "mass_jupiter_compared": "<0.03",
@@ -58,6 +60,7 @@
         "z": 45,
         "color": "0xff6600",
         "name": "Kepler-62c",
+        "resource": "https://sapphire-voluntary-gecko-251.mypinata.cloud/ipfs/Qmdi9vR5GapHfYUuWbt6X6HEqTnZ53KfrwGwvrYy4C5rja",
         "nasa_data": {
             "mass_earth_compared": "<4",
             "mass_jupiter_compared": "<0.013",
@@ -88,6 +91,7 @@
         "ismodel": true,
         "color": "0xff6600",
         "name": "WASP-12b",
+        "resource": "https://sapphire-voluntary-gecko-251.mypinata.cloud/ipfs/QmXqQByuWFpaKCPNsXNdJYgXXD6unuVFcYEm9JXMcyraHZ",
         "nasa_data": {
             "mass_earth_compared": "1.465±0.079",
             "mass_jupiter_compared": "1.465±0.079",
@@ -123,6 +127,7 @@
         "ismodel": true,
         "color": "0x0077ff",
         "name": "Proxima B",
+        "resource": "https://sapphire-voluntary-gecko-251.mypinata.cloud/ipfs/QmXSZPCU5BALpPaLnC8gUchXBBFANs3RMXRJ8XttZ2dYCe",
         "nasa_data": {
             "mass_earth_compared": "1.07±0.06",
             "mass_jupiter_compared": "0.00337±0.00019",
@@ -158,6 +163,7 @@
         "ismodel": true,
         "color": "0xff0000",
         "name": "55 Cancri e",
+        "resource": "https://sapphire-voluntary-gecko-251.mypinata.cloud/ipfs/QmQb2phJrav4779Fe6Z1C6eKLX9cZyZfZJVJ8fduxvFquL",
         "nasa_data": {
             "mass_earth_compared": "7.99+0.32-0.33",
             "mass_jupiter_compared": "0.0251+0.0010-0.0010",
