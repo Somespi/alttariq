@@ -17,6 +17,7 @@
     </div>
     <div class="flex-1 flex flex-col justify-center items-center content-center">
         <div class="flex flex-col gap-y-16">
+            <h1 class="text-3xl font-bold">What grade are you in?</h1>
             <DropDownSelect bind:selected={selectedGrade} options={grades}/>
             <button class="btn btn-primary" disabled={selectedGrade == "Unselected"} on:click={transitionToNextPage}>
                 Explore the Sky

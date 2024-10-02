@@ -5,15 +5,15 @@
 	export let options: string[];
 </script>
 
-<div class="dropdown">
+<div class="dropdown w-full">
 			<input
-				class="input input-primary input-disabled cursor-pointer text-base-content"
+				class="input input-primary input-disabled cursor-pointer text-base-content w-full"
                 contenteditable="false"
 				tabindex="0"
 				bind:value={select}
 			/>
 			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-			<ul tabindex="0" class="menu dropdown-content z-[1] w-52 rounded-box bg-base-100 p-2 shadow">
+			<ul tabindex="0" class="menu dropdown-content z-[1] w-52 rounded-box bg-base-100 p-2 shadow w-full">
 				{#each options as option}
 					<li>
 						<!-- svelte-ignore a11y-missing-attribute -->
