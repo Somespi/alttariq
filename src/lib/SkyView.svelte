@@ -7,11 +7,12 @@
 	import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 	import { SpriteText2D, textAlign } from 'three-text2d'
 	import { Text2D } from 'three-text2d/lib/Text2D';
+	import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 	let container: HTMLDivElement | null = null;
 	let loading = true;
     let loading_percentage = 0;
-	export let planets: {id: number, x: number, y: number, z: number, color: number, name: string}[] = [];
+	export let planets: any[] = [];
 	export let onPlanetClick: (id: number) => void = (id) => {};
 
 	if (browser) {
@@ -101,22 +102,57 @@
 
 
         const createPlanets = async () => {
-			const planetPositions = planets;
-            
-			const planetGeometry = new THREE.SphereGeometry(20, 25, 25);
-            
-            
-			planetPositions.forEach(async (planetprops) =>  {
-				const planet = new THREE.Mesh(planetGeometry, new THREE.MeshStandardMaterial({ color: planetprops.color , emissive: planetprops.color, emissiveIntensity: 12}));
-				planet.position.set(planetprops.x, planetprops.y, planetprops.z);
-				// var sprite =  Text2D(`Planet ${planetprops.id}`, { align: textAlign.center,  font: '40px Arial', fillStyle: '#ffffff' , antialias: false })
-				// sprite.position.set(planetprops.x, planetprops.y, planetprops.z);
-				// scene.add(sprite)
-				scene.add(planet)
-				planetsArr.push(planet); 
+    const planetPositions = planets;
+    const planetGeometry = new THREE.SphereGeometry(20, 25, 25);
+
+    // Loop through each planetProps using for...of for better async handling
+    for (const planetprops of planetPositions) {
+        let planet;
+
+        if (planetprops.ismodel) {
+            const GLTFloader = new GLTFLoader();
+            planet = await new Promise((resolve, reject) => {
+                GLTFloader.load(
+                    `/models/${planetprops.name}.glb`,
+                    (gltf) => {
+                        const model = gltf.scene;
+                        model.scale.set(0.08, 0.08, 0.08);
+                        const box = new THREE.Box3().setFromObject(model);
+                        console.log('Bounding Box:', box);
+                        model.position.set(planetprops.x, planetprops.y, planetprops.z);
+                        //scene.add(model);
+                        resolve(model); 
+                    },
+                    undefined,
+                    (error) => {
+                        console.error('Error loading model:', error);
+                        reject(error);
+                    }
+                );
+            });
+        } else {
+			const textureLoader = new THREE.TextureLoader();
+			const texture = textureLoader.load(`/planets/${planetprops.name}.jpg`); 
+
+			const material = new THREE.MeshStandardMaterial({
+				map: texture, 
+				metalness: 0.1, 
+				roughness: 0.5
 			});
 
-		};
+            planet = new THREE.Mesh(
+                planetGeometry,
+                material
+            );
+		
+            planet.position.set(planetprops.x, planetprops.y, planetprops.z);
+            scene.add(planet);
+        }
+
+        console.log(planet);
+    }
+};
+
 
 		const onWindowResize = () => {
 			camera.aspect = window.innerWidth / window.innerHeight;

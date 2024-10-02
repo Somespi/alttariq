@@ -20,41 +20,44 @@
 		let raycaster = new THREE.Raycaster();
 		let mouse = new THREE.Vector2();
 
-		let planet: THREE.Mesh;
+		let planeted: THREE.Mesh;
 
 		const init = () => {
 			scene = new THREE.Scene();
 
-			camera = new THREE.PerspectiveCamera(
-				75,
-				window.innerWidth / window.innerHeight,
-				0.1,
-				1000
-			);
+			camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 			camera.position.set(0, 0, 100);
 			camera.lookAt(0, 0, 0);
 
 			renderer = new THREE.WebGLRenderer({ antialias: true });
 			renderer.setSize(window.innerWidth, window.innerHeight);
-			
+
+			renderer.shadowMap.enabled = true;
+
 			renderer.setPixelRatio(window.devicePixelRatio);
 			if (container) {
 				container.appendChild(renderer.domElement);
 			}
+
+			renderer.toneMapping = THREE.ACESFilmicToneMapping;
 
 			pmremGenerator = new THREE.PMREMGenerator(renderer);
 			pmremGenerator.compileEquirectangularShader();
 
 			const loader = new EXRLoader();
 			loader.load(
-				"/starmap.exr",
+				'/skybox/Milkyway.exr',
 				(texture, _) => {
 					const envMap = pmremGenerator.fromEquirectangular(texture).texture;
+
 					scene.background = envMap;
+					scene.backgroundIntensity = 0.05;
 					scene.environment = envMap;
 					texture.dispose();
+
 					loading = false;
-					createPlanet(); 
+
+					createPlanet();
 				},
 				(xhr) => {
 					loading_percentage = Math.round((xhr.loaded / xhr.total) * 100);
@@ -74,10 +77,48 @@
 		};
 
 		const createPlanet = () => {
-			const geometry = new THREE.SphereGeometry(20, 64, 64);
-			const material = new THREE.MeshStandardMaterial({ color: 0x0077ff });
-			planet = new THREE.Mesh(geometry, material);
-			scene.add(planet);
+			const geometry = new THREE.SphereGeometry(20 * 2.3, 64, 64); 
+			const textureLoader = new THREE.TextureLoader();
+			const texture = textureLoader.load(`/planets/${planet.name}.jpg`); 
+
+			const material = new THREE.MeshStandardMaterial({
+				map: texture, 
+				metalness: 0.1, 
+				roughness: 0.5
+			});
+
+			
+
+			planeted = new THREE.Mesh(geometry, material);
+			planeted.position.set(-25, 0, 0);
+			planeted.receiveShadow = true; 
+			scene.add(planeted);
+
+			const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
+			directionalLight.position.set(20, 0, 7.5); 
+			directionalLight.castShadow = true; 
+			scene.add(directionalLight);
+
+			const ambientLight = new THREE.AmbientLight(0x404040, 0.5); 
+			scene.add(ambientLight);
+
+			const pointLight = new THREE.PointLight(0xffffff, 2.5, 50); 
+			pointLight.position.set(planeted.position.x, planeted.position.y, planeted.position.z); 
+			scene.add(pointLight);
+
+			const glowGeometry = new THREE.SphereGeometry(20 * 2.34, 64, 64); 
+			const glowMaterial = new THREE.MeshBasicMaterial({
+				color: planet.color, 
+				transparent: true, 
+				opacity: 0.1, 
+				blending: THREE.AdditiveBlending, 
+				depthWrite: false 
+			});
+			planeted.rotation.x += 0.5
+			const glowMesh = new THREE.Mesh(glowGeometry, glowMaterial);
+			glowMesh.castShadow = true;
+			glowMesh.position.set(planeted.position.x, planeted.position.y, planeted.position.z);
+			scene.add(glowMesh);
 		};
 
 		const onWindowResize = () => {
@@ -100,9 +141,11 @@
 
 				rotation.y += deltaMove.x * 0.005;
 				rotation.x += deltaMove.y * 0.005;
-
-				planet.rotation.y = rotation.y;
-				planet.rotation.x = rotation.x;
+				if (planeted) {
+					planeted.rotation.x = rotation.x;
+				planeted.rotation.y = rotation.y;
+				}
+				
 
 				previousMousePosition = { x: event.clientX, y: event.clientY };
 			}
@@ -128,9 +171,11 @@
 
 				rotation.y += deltaMove.x * 0.005;
 				rotation.x += deltaMove.y * 0.005;
-
-				planet.rotation.y = rotation.y;
-				planet.rotation.x = rotation.x;
+				if (planeted) {
+					planeted.rotation.y = rotation.y;
+				planeted.rotation.x = rotation.x;
+				}
+				
 
 				previousMousePosition = { x: event.touches[0].pageX, y: event.touches[0].pageY };
 			}
@@ -142,6 +187,8 @@
 
 		const animate = () => {
 			requestAnimationFrame(animate);
+
+			if (planeted) planeted.rotation.y += 0.0005;
 			render();
 		};
 
@@ -172,10 +219,7 @@
 {#if loading}
 	<p>Loading WebGL... ({loading_percentage == 0 ? 0 : loading_percentage}%)</p>
 {/if}
-<div
-	bind:this={container}
-	style="visibility: {loading ? 'hidden' : 'visible'};"
-></div>
+<div bind:this={container} style="visibility: {loading ? 'hidden' : 'visible'};"></div>
 
 <style>
 	html,
