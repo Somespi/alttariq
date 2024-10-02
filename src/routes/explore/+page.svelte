@@ -3,8 +3,10 @@
 	import { onMount } from 'svelte';
 	import Icon from '@iconify/svelte';
 	import { goto } from '$app/navigation';
-	import Planet from '$lib/Planet.svelte';
-	import PlanetFromModel from '$lib/PlanetFromModel.svelte';
+	import * as THREE from 'three'; 
+	let scene: any; 
+	let camera: any;
+	import { fade } from 'svelte/transition';
 	//@ts-ignore
 	import * as planetsJSON from "$lib/planets.json"; 
 	import DecidePlanet from '$lib/DecidePlanet.svelte';
@@ -198,25 +200,39 @@
 				}, 15);
 		})
 	}
+
+
 	const onPlanetClick = (planet_id: number) => {
 		let url = new URL(window.location.href);
 		url.searchParams.set('id', planet_id.toString());
-		window.history.replaceState(null, '', url);
+		window.history.pushState(null, '', url);
 		id = planet_id;
 
 		overviewGeneration(id);
 		detailsGeneration(id);
 	};
+
+	const backToDiscovery = () => {
+		let url = new URL(window.location.href);
+		url.searchParams.delete('id');
+		window.history.pushState(null, '', url);
+		id = -1;
+	}
 </script>
 
 {#if !is_loaded}
 	Loading...
 {:else if id == -1}
-	<SkyView {planets} {onPlanetClick} />
+	<SkyView scene={scene} camera={camera} {planets} {onPlanetClick} />
 {:else}
 	<div class="flex h-screen w-full flex-row">
+		<div class="absolute w-auto p-2 m-5">
+			<button class="btn btn-sm btn-primary btn-outline" on:click={backToDiscovery}>
+				Back to Discovering
+			</button>
+		</div>
 		<div class=" h-full w-[63%] bg-slate-950">
-			<DecidePlanet planet={planets[id]} /> 
+			<DecidePlanet THREE={THREE} scene={scene} camera={camera} planet={planets[id]} /> 
 		</div>
 
 		<div class="h-full flex-1 p-3">

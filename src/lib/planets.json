@@ -83,7 +83,7 @@
     {
         "id": 3,
         "x": 350,
-        "y": -110,
+        "y": -50,
         "z": 190,
         "ismodel": true,
         "color": "0xff6600",
@@ -113,5 +113,75 @@
             "Mp_sin_i_MJupiter": "---",
             "e": "0.05±0.01"
         }
-    }
+    },
+
+    {
+        "id": 4,
+        "x": 300,
+        "y": 100,
+        "z": -50,
+        "ismodel": true,
+        "color": "0x0077ff",
+        "name": "Proxima B",
+        "nasa_data": {
+            "mass_earth_compared": "1.07±0.06",
+            "mass_jupiter_compared": "0.00337±0.00019",
+            "radius_earth_compared": "---", 
+            "radius_jupiter_compared": "---", 
+            "orbit_period": "11.1868+0.0029-0.0031 days",
+            "temperature": "234+6-14 K", 
+            "inclination_angle": "---", 
+            "semi_major_axis": "0.04856±0.00030 AU",
+            "time_of_conjunction": "---", 
+            "eccentricity": "0.02+0.04-0.02",
+            "density": "---",
+            "transit_duration": "---", 
+            "a_over_Rstar": "---", 
+            "b": "---", 
+            "Rp_over_Rstar": "---", 
+            "radial_velocity_semi_amplitude": "1.24±0.07 m/s",
+            "K": "1.24±0.07 m/s", 
+            "delta": "---", 
+            "Teq": "234+6-14 K",
+            "lambda": "---", 
+            "Mp_sin_i_Mearth": "1.07±0.06",
+            "Mp_sin_i_MJupiter": "0.00337±0.00019",
+            "e": "0.02+0.04-0.02"
+        }
+    },
+
+    {
+        "id": 5,
+        "x": 200,
+        "y": 50,
+        "z": 250,
+        "ismodel": true,
+        "color": "0xff0000",
+        "name": "55 Cancri e",
+        "nasa_data": {
+            "mass_earth_compared": "7.99+0.32-0.33",
+            "mass_jupiter_compared": "0.0251+0.0010-0.0010",
+            "radius_earth_compared": "1.875±0.029",
+            "radius_jupiter_compared": "0.1673±0.0026",
+            "orbit_period": "0.7365474+0.0000013-0.0000014 days",
+            "temperature": "---",
+            "inclination_angle": "83.59+0.47-0.44 degrees",
+            "semi_major_axis": "0.01544±0.00005 AU",
+            "time_of_conjunction": "2457063.2096+0.0006-0.0004 JD",
+            "eccentricity": "0.05±0.03",
+            "density": "6.66+0.43-0.40 g/cm³",
+            "transit_duration": "---",
+            "a_over_Rstar": "3.52±0.01",
+            "b": "0.39±0.03",
+            "Rp_over_Rstar": "0.0182±0.0002",
+            "radial_velocity_semi_amplitude": "6.02+0.24-0.23 m/s",
+            "K": "6.02+0.24-0.23 m/s",
+            "delta": "0.0374±0.0170",
+            "Teq": "---",
+            "lambda": "---",
+            "Mp_sin_i_Mearth": "---",
+            "Mp_sin_i_MJupiter": "---",
+            "e": "0.05±0.03"
+        }
+    }    
 ]

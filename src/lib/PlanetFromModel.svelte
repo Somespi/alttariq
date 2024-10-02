@@ -1,28 +1,31 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
-	import * as THREE from 'three';
 	import { browser } from '$app/environment';
 	import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js';
 	import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 	import Geometries from 'three/src/renderers/common/Geometries.js';
+	import { fly } from 'svelte/transition';
 
 	let container: HTMLDivElement | null = null;
 	let loading = true;
 	let loading_percentage = 0;
 	export let planet;
+	export let three;
+	let planet_created = false;
+	const THREE = three;
+	export let camera: any;
+	export let scene: any;
 
 	if (browser) {
-		let camera: THREE.PerspectiveCamera;
-		let scene: THREE.Scene;
-		let renderer: THREE.WebGLRenderer;
-		let pmremGenerator: THREE.PMREMGenerator;
+		let renderer: any;
+		let pmremGenerator: any;
 		let isUserInteracting = false;
 		let previousMousePosition = { x: 0, y: 0 };
 		let rotation = { x: 0, y: 0 };
 		let raycaster = new THREE.Raycaster();
 		let mouse = new THREE.Vector2();
 
-		let planeted: THREE.Mesh;
+		let planeted: any;
 
 		const init = () => {
 			scene = new THREE.Scene();
@@ -79,51 +82,47 @@
 		};
 
 		const createPlanet = () => {
-    const loader = new GLTFLoader();
-    loader.load(
-        `/models/${planet.name}.glb`,
-        (gltf) => {
+			if (planet_created) return;
+			planet_created = true;
+			const loader = new GLTFLoader();
+			loader.load(
+				`/models/${planet.name}.glb`,
+				(gltf) => {
+					const model = gltf.scene;
+					model.scale.set(0.08, 0.08, 0.08);
 
-			const model = gltf.scene;
-			model.scale.set(0.08, 0.08, 0.08);
-			scene.add(model);
+					
+					planeted = model;
 
-			const box = new THREE.Box3().setFromObject(model);
-			console.log('Bounding Box:', box);
-			//@ts-ignore
-			planeted = model;
+					if (planeted) {
+						planeted.position.set(-25, 0, 0);
+						planeted.receiveShadow = true;
+						scene.add(planeted);
+					} else {
+						console.error('No mesh found in the loaded GLTF model.');
+						return;
+					}
 
-            if (planeted) {
-                planeted.position.set(-25, 0, 0);
-                planeted.receiveShadow = true;
-                scene.add(planeted);
-            } else {
-                console.error('No mesh found in the loaded GLTF model.');
-                return;
-            }
+					const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
+					directionalLight.position.set(20, 0, 7.5);
+					directionalLight.castShadow = true;
+					scene.add(directionalLight);
 
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
-            directionalLight.position.set(20, 0, 7.5);
-            directionalLight.castShadow = true;
-            scene.add(directionalLight);
+					const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+					scene.add(ambientLight);
 
-            const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
-            scene.add(ambientLight);
-
-            const pointLight = new THREE.PointLight(0xffffff, 2.5, 50);
-            pointLight.position.set(planeted.position.x, planeted.position.y, planeted.position.z);
-            scene.add(pointLight);
-
-            
-        },
-        (xhr) => {
-            loading_percentage = Math.round((xhr.loaded / xhr.total) * 100);
-        },
-        (error) => {
-            console.error('Error loading model:', error);
-        }
-    );
-};
+					const pointLight = new THREE.PointLight(0xffffff, 2.5, 50);
+					pointLight.position.set(planeted.position.x, planeted.position.y, planeted.position.z);
+					scene.add(pointLight);
+				},
+				(xhr) => {
+					loading_percentage = Math.round((xhr.loaded / xhr.total) * 100);
+				},
+				(error) => {
+					console.error('Error loading model:', error);
+				}
+			);
+		};
 
 		const onWindowResize = () => {
 			camera.aspect = window.innerWidth / window.innerHeight;

@@ -1,26 +1,29 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
-	import * as THREE from 'three';
 	import { browser } from '$app/environment';
 	import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js';
 
 	let container: HTMLDivElement | null = null;
 	let loading = true;
 	let loading_percentage = 0;
+	let planet_created = false;
 	export let planet;
+	export let three;
+	const THREE = three;
+	export let scene: any;
+	export let camera: any;
+
 
 	if (browser) {
-		let camera: THREE.PerspectiveCamera;
-		let scene: THREE.Scene;
-		let renderer: THREE.WebGLRenderer;
-		let pmremGenerator: THREE.PMREMGenerator;
+		let renderer: any;
+		let pmremGenerator: any;
 		let isUserInteracting = false;
 		let previousMousePosition = { x: 0, y: 0 };
 		let rotation = { x: 0, y: 0 };
 		let raycaster = new THREE.Raycaster();
 		let mouse = new THREE.Vector2();
 
-		let planeted: THREE.Mesh;
+		let planeted: any;
 
 		const init = () => {
 			scene = new THREE.Scene();
@@ -77,6 +80,8 @@
 		};
 
 		const createPlanet = () => {
+			if (planet_created) return;
+			planet_created = true;
 			const geometry = new THREE.SphereGeometry(20 * 2.3, 64, 64); 
 			const textureLoader = new THREE.TextureLoader();
 			const texture = textureLoader.load(`/planets/${planet.name}.jpg`); 
