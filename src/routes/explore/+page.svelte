@@ -63,7 +63,7 @@
 	};
 
 	const overviewGeneration = (id: number) => {
-		fetch('http://localhost:8080' + '/prompt', {
+		fetch('https://alttariq-api.vercel.app' + '/prompt', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -103,7 +103,7 @@
 	}
 
 	const detailsGeneration = (id: number) => {
-		fetch('http://localhost:8080' + '/prompt', {
+		fetch('https://alttariq-api.vercel.app' + '/prompt', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -143,7 +143,7 @@
 	}
 
 	const tidyUpDetails = () => {
-		fetch('http://localhost:8080' + '/prompt', {
+		fetch('https://alttariq-api.vercel.app' + '/prompt', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -170,7 +170,7 @@
 	}
 
 	const promptGeneration = (id: number) => {
-		fetch('http://localhost:8080' + '/prompt', {
+		fetch('https://alttariq-api.vercel.app' + '/prompt', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
