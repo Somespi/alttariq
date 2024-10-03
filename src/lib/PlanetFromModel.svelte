@@ -91,7 +91,6 @@
 					const model = gltf.scene;
 					model.scale.set(0.08, 0.08, 0.08);
 
-					
 					planeted = model;
 
 					if (planeted) {

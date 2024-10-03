@@ -14,19 +14,19 @@
 
 	onMount(() => {
 		const currentTheme = localStorage.getItem('theme') || 'dark';
-        theme = currentTheme === 'dark';
+		theme = currentTheme === 'dark';
 		document.querySelector('html')?.setAttribute('data-theme', currentTheme);
 		localStorage.setItem('theme', currentTheme);
 	});
 
 	const changetheme = () => {
-        const newTheme = document.querySelector('html')?.getAttribute('data-theme') === 'dark' ? 'garden' : 'dark';
-        theme = !theme;
+		const newTheme =
+			document.querySelector('html')?.getAttribute('data-theme') === 'dark' ? 'garden' : 'dark';
+		theme = !theme;
 		document.querySelector('html')?.setAttribute('data-theme', newTheme);
 		localStorage.setItem('theme', newTheme);
-	}
+	};
 </script>
-
 
 <div class="absolute right-2 top-2">
 	<label class="swap swap-rotate">

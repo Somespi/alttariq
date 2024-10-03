@@ -13,7 +13,6 @@
 	export let scene: any;
 	export let camera: any;
 
-
 	if (browser) {
 		let renderer: any;
 		let pmremGenerator: any;
@@ -82,44 +81,42 @@
 		const createPlanet = () => {
 			if (planet_created) return;
 			planet_created = true;
-			const geometry = new THREE.SphereGeometry(20 * 2.3, 64, 64); 
+			const geometry = new THREE.SphereGeometry(20 * 2.3, 64, 64);
 			const textureLoader = new THREE.TextureLoader();
-			const texture = textureLoader.load(planet.resource); 
+			const texture = textureLoader.load(planet.resource);
 
 			const material = new THREE.MeshStandardMaterial({
-				map: texture, 
-				metalness: 0.1, 
+				map: texture,
+				metalness: 0.1,
 				roughness: 0.5
 			});
 
-			
-
 			planeted = new THREE.Mesh(geometry, material);
 			planeted.position.set(-25, 0, 0);
-			planeted.receiveShadow = true; 
+			planeted.receiveShadow = true;
 			scene.add(planeted);
 
 			const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
-			directionalLight.position.set(20, 0, 7.5); 
-			directionalLight.castShadow = true; 
+			directionalLight.position.set(20, 0, 7.5);
+			directionalLight.castShadow = true;
 			scene.add(directionalLight);
 
-			const ambientLight = new THREE.AmbientLight(0x404040, 0.5); 
+			const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
 			scene.add(ambientLight);
 
-			const pointLight = new THREE.PointLight(0xffffff, 2.5, 50); 
-			pointLight.position.set(planeted.position.x, planeted.position.y, planeted.position.z); 
+			const pointLight = new THREE.PointLight(0xffffff, 2.5, 50);
+			pointLight.position.set(planeted.position.x, planeted.position.y, planeted.position.z);
 			scene.add(pointLight);
 
-			const glowGeometry = new THREE.SphereGeometry(20 * 2.34, 64, 64); 
+			const glowGeometry = new THREE.SphereGeometry(20 * 2.34, 64, 64);
 			const glowMaterial = new THREE.MeshBasicMaterial({
-				color: planet.color, 
-				transparent: true, 
-				opacity: 0.1, 
-				blending: THREE.AdditiveBlending, 
-				depthWrite: false 
+				color: planet.color,
+				transparent: true,
+				opacity: 0.1,
+				blending: THREE.AdditiveBlending,
+				depthWrite: false
 			});
-			planeted.rotation.x += 0.5
+			planeted.rotation.x += 0.5;
 			const glowMesh = new THREE.Mesh(glowGeometry, glowMaterial);
 			glowMesh.castShadow = true;
 			glowMesh.position.set(planeted.position.x, planeted.position.y, planeted.position.z);
@@ -148,9 +145,8 @@
 				rotation.x += deltaMove.y * 0.005;
 				if (planeted) {
 					planeted.rotation.x = rotation.x;
-				planeted.rotation.y = rotation.y;
+					planeted.rotation.y = rotation.y;
 				}
-				
 
 				previousMousePosition = { x: event.clientX, y: event.clientY };
 			}
@@ -178,9 +174,8 @@
 				rotation.x += deltaMove.y * 0.005;
 				if (planeted) {
 					planeted.rotation.y = rotation.y;
-				planeted.rotation.x = rotation.x;
+					planeted.rotation.x = rotation.x;
 				}
-				
 
 				previousMousePosition = { x: event.touches[0].pageX, y: event.touches[0].pageY };
 			}
