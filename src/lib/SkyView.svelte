@@ -23,7 +23,8 @@
 		let renderer: THREE.WebGLRenderer;
 		let pmremGenerator: THREE.PMREMGenerator;
 		let isUserInteracting = false;
-		let lon = 0, lat = 0;
+		let lon = 0,
+			lat = 0;
 		let raycaster = new THREE.Raycaster();
 		let mouse = new THREE.Vector2();
 		let onPointerDownMouseX = 0,
@@ -42,8 +43,8 @@
 			renderer.setSize(window.innerWidth, window.innerHeight);
 			renderer.setPixelRatio(window.devicePixelRatio);
 			if (container) container.appendChild(renderer.domElement);
-			renderer.shadowMap.enabled = true; 
-            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+			renderer.shadowMap.enabled = true;
+			renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 			pmremGenerator = new THREE.PMREMGenerator(renderer);
 			pmremGenerator.compileEquirectangularShader();
@@ -67,8 +68,8 @@
 				}
 			);
 
-			const ambientLight = new THREE.AmbientLight(0x404040, 1); 
-            scene.add(ambientLight);
+			const ambientLight = new THREE.AmbientLight(0x404040, 1);
+			scene.add(ambientLight);
 
 			addEventListeners();
 		};
@@ -85,29 +86,31 @@
 		};
 
 		const onDocumentClick = (event: MouseEvent) => {
-	mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-	mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+			let url = new URL(window.location.href);
+			if (url.searchParams.get('id') != null) return;
 
-	raycaster.setFromCamera(mouse, camera);
-	const intersects = raycaster.intersectObjects(planetsArr, true); 
+			mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+			mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-	if (intersects.length > 0) {
-		let clickedObject = intersects[0].object;
-		let planetIndex = planetsArr.indexOf(clickedObject);
+			raycaster.setFromCamera(mouse, camera);
+			const intersects = raycaster.intersectObjects(planetsArr, true);
 
-		if (planetIndex === -1 && clickedObject.parent) {
-			planetIndex = planetsArr.indexOf(clickedObject.parent);
-		}
+			if (intersects.length > 0) {
+				let clickedObject = intersects[0].object;
+				let planetIndex = planetsArr.indexOf(clickedObject);
 
-		if (planetIndex !== -1) {
-			onPlanetClick(planetIndex);
-		}
-	}
-};
+				if (planetIndex === -1 && clickedObject.parent) {
+					planetIndex = planetsArr.indexOf(clickedObject.parent);
+				}
 
+				if (planetIndex !== -1) {
+					onPlanetClick(planetIndex);
+				}
+			}
+		};
 
 		const createPlanets = async () => {
-			if (planetsArr.length > 0) return; 
+			if (planetsArr.length > 0) return;
 			const planetGeometry = new THREE.SphereGeometry(20, 25, 25);
 			const textureLoader = new THREE.TextureLoader();
 			const gltfLoader = new GLTFLoader();
@@ -121,7 +124,11 @@
 					planet.scale.set(0.05, 0.05, 0.05);
 				} else {
 					const texture = textureLoader.load(planetprops.resource);
-					const material = new THREE.MeshStandardMaterial({ map: texture, metalness: 0.1, roughness: 0.5 });
+					const material = new THREE.MeshStandardMaterial({
+						map: texture,
+						metalness: 0.1,
+						roughness: 0.5
+					});
 					planet = new THREE.Mesh(planetGeometry, material);
 				}
 
@@ -129,10 +136,8 @@
 				planet.receiveShadow = true;
 				scene.add(planet);
 				planetsArr.push(planet);
-				
+
 				addLabel(planetprops.name, planet.position);
-
-
 
 				const planetLight = new THREE.PointLight(0xffffff, 1.5, 75);
 				planetLight.position.copy(planet.position);
@@ -142,15 +147,23 @@
 		};
 
 		const fontLoader = new FontLoader();
-		const addLabel = (text: string, position: { x: number; y: number; z: number; }) => {
-			fontLoader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', (font) => {
-				const textGeometry = new TextGeometry(text, { font, size: 6, depth: 1, bevelEnabled: false });
-				const textMesh = new Mesh(textGeometry, new MeshBasicMaterial({ color: 0xffffff }));
-				textMesh.position.set(position.x, position.y - 40, position.z - 20);
-				textMesh.renderOrder = 1;
-				textMesh.lookAt(camera.position);
-				scene.add(textMesh);
-			});
+		const addLabel = (text: string, position: { x: number; y: number; z: number }) => {
+			fontLoader.load(
+				'https://threejs.org/examples/fonts/helvetiker_regular.typeface.json',
+				(font) => {
+					const textGeometry = new TextGeometry(text, {
+						font,
+						size: 6,
+						depth: 1,
+						bevelEnabled: false
+					});
+					const textMesh = new Mesh(textGeometry, new MeshBasicMaterial({ color: 0xffffff }));
+					textMesh.position.set(position.x, position.y - 40, position.z - 20);
+					textMesh.renderOrder = 1;
+					textMesh.lookAt(camera.position);
+					scene.add(textMesh);
+				}
+			);
 		};
 
 		const onWindowResize = () => {
@@ -256,7 +269,8 @@
 ></div>
 
 <style>
-	html, body {
+	html,
+	body {
 		margin: 0;
 		padding: 0;
 		overflow: hidden;
