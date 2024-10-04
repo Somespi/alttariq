@@ -99,7 +99,7 @@
 						planeted.position.set(-25, 0, 0);
 						planeted.receiveShadow = true;
 						scene.add(planeted);
-						addEarth(handleEarthMassCompared(planet.nasa_data.mass_earth_compared), model.scale);
+						addEarth(handleEarthMassCompared(planet.nasa_data.radius_earth_compared), model.scale);
 					} else {
 						console.error('No mesh found in the loaded GLTF model.');
 						return;
@@ -158,6 +158,7 @@
 			const size = new THREE.Vector3();
 			box.getSize(size);
 			planet.scale.set(size.x / 2, size.x / 2, size.z / 2);
+			
 			planet.scale.multiplyScalar(1 / comparison_times);
 			planet.position.set(-40, 0, 0);
 			planet.receiveShadow = true;
@@ -291,6 +292,11 @@
 
 			if (renderer) renderer.dispose();
 			if (pmremGenerator) pmremGenerator.dispose();
+			if (container) container.innerHTML = '';
+			if (scene) scene = null;
+			if (camera) camera = null;
+			if (renderer) renderer = null;
+			if (planeted) planeted = null;
 		});
 	}
 </script>

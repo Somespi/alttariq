@@ -98,8 +98,8 @@
 			planeted.position.set(-25, 0, 0);
 			planeted.receiveShadow = true;
 			scene.add(planeted);
-			addEarth(handleEarthMassCompared(planet.nasa_data.mass_earth_compared));
-
+			addEarth(handleEarthMassCompared(planet.nasa_data.radius_earth_compared));
+			
 			const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
 			directionalLight.position.set(20, 0, 7.5);
 			directionalLight.castShadow = true;
@@ -123,6 +123,7 @@
 			planeted.rotation.x += 0.5;
 			const glowMesh = new THREE.Mesh(glowGeometry, glowMaterial);
 			glowMesh.castShadow = true;
+			glowMesh.scale.set(planeted.scale.x, planeted.scale.y, planeted.scale.z);
 			glowMesh.position.set(planeted.position.x, planeted.position.y, planeted.position.z);
 			scene.add(glowMesh);
 			glow_material = glowMesh;
@@ -143,7 +144,13 @@
 		}
 
 		const addEarth = (comparison_times: number) => {
-			const geometry = new THREE.SphereGeometry((20 * 2.3) / comparison_times , 64, 64);
+			let geometry;
+			if (comparison_times < 1) {
+				planeted.scale.set(comparison_times, comparison_times, comparison_times);
+				geometry = new THREE.SphereGeometry((20 * 2.3) , 64, 64);
+		} else {
+				geometry = new THREE.SphereGeometry((20 * 2.3) / comparison_times , 64, 64);
+			}
 			
 			const textureLoader = new THREE.TextureLoader();
 			const texture = textureLoader.load("/earth.jpg");
@@ -250,7 +257,7 @@
 						scene.remove(data);
 					});
 					planeted.position.set(-25, 0, 0);
-					glow_material.position.set(planeted.position.x, planeted.position.y, planeted.position.z);
+					if (glow_material) glow_material.position.set(planeted.position.x, planeted.position.y, planeted.position.z);
 				}
 			}
 			else {
@@ -260,7 +267,7 @@
 							scene.add(data);
 						});
 						planeted.position.set(60, 0, 0);
-						glow_material.position.set(planeted.position.x, planeted.position.y, planeted.position.z);
+						if (glow_material) glow_material.position.set(planeted.position.x, planeted.position.y, planeted.position.z);
 					}
 				}
 			}
@@ -289,6 +296,10 @@
 
 			if (renderer) renderer.dispose();
 			if (pmremGenerator) pmremGenerator.dispose();
+			if (scene) scene = null;
+			if (camera) camera = null;
+			if (renderer) renderer = null;
+			if (planeted) planeted = null;
 		});
 	}
 </script>

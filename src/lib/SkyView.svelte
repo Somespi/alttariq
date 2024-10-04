@@ -253,6 +253,10 @@
 
 			if (renderer) renderer.dispose();
 			if (pmremGenerator) pmremGenerator.dispose();
+			if (scene) scene = null;
+			if (camera) camera = null;
+			if (renderer) renderer = null;
+			if (planeted) planeted = null;
 		});
 	}
 </script>

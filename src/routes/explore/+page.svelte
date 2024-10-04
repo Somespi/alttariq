@@ -259,8 +259,14 @@
 		return '~ ' + surfaceGravityLower.toFixed(2).toString() + ' g';
 	}
 
-	function compareToEarth() {
-		is_comparing = !is_comparing;
+	function compareToEarth(id: number) {
+		if (planets[id].nasa_data.radius_earth_compared == '---') {
+			alert(
+				"NASA does not currently have data on the radius of the planet compared to Earth."
+			)
+		} else {
+			is_comparing = !is_comparing;
+		}
 	}
 </script>
 
@@ -279,7 +285,7 @@
 				Back to Discovering
 			</button>
 
-			<button class="btn {is_comparing ? '' : 'btn-outline'} btn-secondary btn-sm" on:click={compareToEarth}>
+			<button class="btn {is_comparing ? '' : 'btn-outline'} btn-secondary btn-sm" on:click={() => compareToEarth(id)}>
 				{#if !is_comparing}
 					Compare to Earth
 				{:else}
