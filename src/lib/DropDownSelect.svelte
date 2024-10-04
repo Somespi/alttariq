@@ -15,7 +15,7 @@
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<ul
 		tabindex="0"
-		class="menu dropdown-content z-[1] w-52 w-full rounded-box bg-base-100 p-2 shadow"
+		class="menu dropdown-content z-[1] w-full rounded-box bg-base-100 p-2 shadow"
 	>
 		{#each options as option}
 			<li>

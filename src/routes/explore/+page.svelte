@@ -7,11 +7,9 @@
 	let scene: any;
 	import Card from '$lib/Card.svelte';
 	let camera: any;
-	import { fade } from 'svelte/transition';
 	//@ts-ignore
 	import * as planetsJSON from '$lib/planets.json';
 	import DecidePlanet from '$lib/DecidePlanet.svelte';
-	import { contain } from 'three/src/extras/TextureUtils.js';
 	//@ts-ignore
 	let planets = planetsJSON['default'];
 	$: id = -1;
@@ -23,8 +21,7 @@
 	$: displayed_tidy = '';
 	$: displayed_prompt = '';
 	$: promptG = '';
-
-	$: planet_mass = '';
+	$: is_comparing = false;
 
 	const generateNasaDataIntoString = (data: {}) => {
 		let string = '';
@@ -233,8 +230,8 @@
 		displayed_prompt = '';
 		promptG = '';
 
-		overviewGeneration(id);
-		detailsGeneration(id);
+		//overviewGeneration(id);
+		//detailsGeneration(id);
 	};
 
 	const backToDiscovery = () => {
@@ -261,6 +258,10 @@
 		const surfaceGravityUpper = earthGravity * (massValue / Math.pow(radiusLowerBound, 2));
 		return '~ ' + surfaceGravityLower.toFixed(2).toString() + ' g';
 	}
+
+	function compareToEarth() {
+		is_comparing = !is_comparing;
+	}
 </script>
 
 {#if !is_loaded}
@@ -273,12 +274,20 @@
 			<button class="btn btn-outline btn-primary btn-sm" on:click={backToDiscovery}>
 				Back to Discovering
 			</button>
+
+			<button class="btn {is_comparing ? '' : 'btn-outline'} btn-secondary btn-sm" on:click={compareToEarth}>
+				{#if !is_comparing}
+					Compare to Earth
+				{:else}
+					Close Comparison 
+				{/if}
+			</button>
 		</div>
 		<div class=" h-full w-[63%] bg-slate-950">
-			<DecidePlanet {THREE} {scene} {camera} planet={planets[id]} />
+			<DecidePlanet {is_comparing} {THREE} {scene} {camera} planet={planets[id]} />
 		</div>
 
-		<div class="h-full flex-1 p-3">
+		<div class="h-full flex-1 p-3" style="display: {is_comparing ? 'none' : 'block'};">
 			<div class="h-full w-full overflow-y-auto rounded-2xl bg-base-200 p-3 text-base-content">
 				<h1 class="text-2xl font-medium">
 					{planets[id].name}

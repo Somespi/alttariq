@@ -2,6 +2,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
 	import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js';
+	import type { Vector3 } from 'three';
 
 	let container: HTMLDivElement | null = null;
 	let loading = true;
@@ -9,9 +10,11 @@
 	let planet_created = false;
 	export let planet;
 	export let three;
+	export let is_comparing;
 	const THREE = three;
 	export let scene: any;
 	export let camera: any;
+	let earth_data: any[] = [];
 
 	if (browser) {
 		let renderer: any;
@@ -21,7 +24,7 @@
 		let rotation = { x: 0, y: 0 };
 		let raycaster = new THREE.Raycaster();
 		let mouse = new THREE.Vector2();
-
+		let glow_material: any;
 		let planeted: any;
 
 		const init = () => {
@@ -95,6 +98,7 @@
 			planeted.position.set(-25, 0, 0);
 			planeted.receiveShadow = true;
 			scene.add(planeted);
+			addEarth(handleEarthMassCompared(planet.nasa_data.mass_earth_compared));
 
 			const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
 			directionalLight.position.set(20, 0, 7.5);
@@ -108,7 +112,7 @@
 			pointLight.position.set(planeted.position.x, planeted.position.y, planeted.position.z);
 			scene.add(pointLight);
 
-			const glowGeometry = new THREE.SphereGeometry(20 * 2.34, 64, 64);
+			const glowGeometry = new THREE.SphereGeometry((20 * 2.34) , 64, 64);
 			const glowMaterial = new THREE.MeshBasicMaterial({
 				color: planet.color,
 				transparent: true,
@@ -121,7 +125,58 @@
 			glowMesh.castShadow = true;
 			glowMesh.position.set(planeted.position.x, planeted.position.y, planeted.position.z);
 			scene.add(glowMesh);
+			glow_material = glowMesh;
 		};
+
+		const handleEarthMassCompared = (comparison_times: string) => {
+			if (comparison_times.includes('+')) {
+				return (parseFloat(comparison_times.split('+')[0]));
+			}
+
+			if (comparison_times.includes('<')) {
+				return (parseFloat(comparison_times.split('<')[1]));
+			}
+			if (comparison_times.includes('±')) {
+				return (parseFloat(comparison_times.split('±')[0]));
+			}
+			return 1;
+		}
+
+		const addEarth = (comparison_times: number) => {
+			const geometry = new THREE.SphereGeometry((20 * 2.3) / comparison_times , 64, 64);
+			
+			const textureLoader = new THREE.TextureLoader();
+			const texture = textureLoader.load("/earth.jpg");
+			
+			const material = new THREE.MeshStandardMaterial({
+				map: texture,
+				metalness: 0.1,
+				roughness: 0.5,
+				color: new THREE.Color(0xaaaaaa),
+			});
+
+			let planet = new THREE.Mesh(geometry, material);
+			planet.position.set(-40, 0, 0);
+			planet.receiveShadow = true;
+
+			const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
+			directionalLight.position.set(20, 0, 7.5);
+			directionalLight.castShadow = true;
+
+			const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+
+			const pointLight = new THREE.PointLight(0xffffff, 2.5, 50);
+			pointLight.position.set(planet.position.x, planet.position.y, planet.position.z);
+			scene.add(pointLight);
+			planet.rotation.x += 0.5;
+
+			earth_data.push(planet);
+			earth_data.push(pointLight);
+			earth_data.push(ambientLight);
+			earth_data.push(directionalLight);
+
+		}
+
 
 		const onWindowResize = () => {
 			camera.aspect = window.innerWidth / window.innerHeight;
@@ -187,7 +242,29 @@
 
 		const animate = () => {
 			requestAnimationFrame(animate);
-
+			if (planeted) {
+			if (!is_comparing) {
+				
+				if (planeted.position && planeted.position.x != -25) {
+					earth_data.forEach((data) => {
+						scene.remove(data);
+					});
+					planeted.position.set(-25, 0, 0);
+					glow_material.position.set(planeted.position.x, planeted.position.y, planeted.position.z);
+				}
+			}
+			else {
+				if (planeted.position && planeted.position.x != 60) {
+					while (planeted.position.x != 60) {
+						earth_data.forEach((data: any) => {
+							scene.add(data);
+						});
+						planeted.position.set(60, 0, 0);
+						glow_material.position.set(planeted.position.x, planeted.position.y, planeted.position.z);
+					}
+				}
+			}
+			}
 			if (planeted) planeted.rotation.y += 0.0005;
 			render();
 		};
@@ -221,7 +298,8 @@
 {/if}
 <div bind:this={container} style="visibility: {loading ? 'hidden' : 'visible'};"></div>
 
-<style>
+
+<style >
 	html,
 	body {
 		margin: 0;

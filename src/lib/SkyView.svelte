@@ -245,11 +245,10 @@
 			document.removeEventListener('mousedown', onPointerDown);
 			document.removeEventListener('mousemove', onPointerMove);
 			document.removeEventListener('mouseup', onPointerUp);
-
 			document.removeEventListener('touchstart', onTouchStart);
 			document.removeEventListener('touchmove', onTouchMove);
 			document.removeEventListener('touchend', onTouchEnd);
-
+			document.removeEventListener('click', onDocumentClick);
 			window.removeEventListener('resize', onWindowResize);
 
 			if (renderer) renderer.dispose();

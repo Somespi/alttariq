@@ -3,14 +3,16 @@
 	import { browser } from '$app/environment';
 	import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js';
 	import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-	import Geometries from 'three/src/renderers/common/Geometries.js';
-	import { fly } from 'svelte/transition';
+	import type { Vector3 } from 'three';
+
 
 	let container: HTMLDivElement | null = null;
 	let loading = true;
 	let loading_percentage = 0;
 	export let planet;
+	let earth_data: any[] = [];
 	export let three;
+	export let is_comparing;
 	let planet_created = false;
 	const THREE = three;
 	export let camera: any;
@@ -97,11 +99,11 @@
 						planeted.position.set(-25, 0, 0);
 						planeted.receiveShadow = true;
 						scene.add(planeted);
+						addEarth(handleEarthMassCompared(planet.nasa_data.mass_earth_compared), model.scale);
 					} else {
 						console.error('No mesh found in the loaded GLTF model.');
 						return;
 					}
-
 					const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
 					directionalLight.position.set(20, 0, 7.5);
 					directionalLight.castShadow = true;
@@ -122,6 +124,62 @@
 				}
 			);
 		};
+
+
+		const handleEarthMassCompared = (comparison_times: string) => {
+			if (comparison_times.includes('+')) {
+				return (parseFloat(comparison_times.split('+')[0]));
+			}
+
+			if (comparison_times.includes('<')) {
+				return (parseFloat(comparison_times.split('<')[1]));
+			}
+			if (comparison_times.includes('±')) {
+				return (parseFloat(comparison_times.split('±')[0]));
+			}
+			return 1;
+		}
+
+		const addEarth = (comparison_times: number, planet_scale: Vector3) => {
+			const geometry = new THREE.SphereGeometry(1 , 64, 64);
+			
+			const textureLoader = new THREE.TextureLoader();
+			const texture = textureLoader.load("/earth.jpg");
+			
+			const material = new THREE.MeshStandardMaterial({
+				map: texture,
+				metalness: 0.1,
+				roughness: 0.5,
+				color: new THREE.Color(0xaaaaaa),
+			});
+
+			let planet = new THREE.Mesh(geometry, material);
+			const box = new THREE.Box3().setFromObject(planeted);
+			const size = new THREE.Vector3();
+			box.getSize(size);
+			planet.scale.set(size.x / 2, size.x / 2, size.z / 2);
+			planet.scale.multiplyScalar(1 / comparison_times);
+			planet.position.set(-40, 0, 0);
+			planet.receiveShadow = true;
+
+			const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
+			directionalLight.position.set(20, 0, 7.5);
+			directionalLight.castShadow = true;
+
+			const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+
+			const pointLight = new THREE.PointLight(0xffffff, 2.5, 50);
+			pointLight.position.set(planet.position.x, planet.position.y, planet.position.z);
+			scene.add(pointLight);
+			planet.rotation.x += 0.5;
+
+			earth_data.push(planet);
+			earth_data.push(pointLight);
+			earth_data.push(ambientLight);
+			earth_data.push(directionalLight);
+
+		}
+
 
 		const onWindowResize = () => {
 			camera.aspect = window.innerWidth / window.innerHeight;
@@ -187,6 +245,27 @@
 
 		const animate = () => {
 			requestAnimationFrame(animate);
+			if (planeted) {
+			if (!is_comparing) {
+				
+				if (planeted.position && planeted.position.x != -25) {
+					earth_data.forEach((data) => {
+						scene.remove(data);
+					});
+					planeted.position.set(-25, 0, 0);
+				}
+			}
+			else {
+				if (planeted.position && planeted.position.x != 60) {
+					while (planeted.position.x != 60) {
+						earth_data.forEach((data: any) => {
+							scene.add(data);
+						});
+						planeted.position.set(60, 0, 0);
+					}
+				}
+			}
+			}
 
 			if (planeted) planeted.rotation.y += 0.0005;
 			render();

@@ -5,13 +5,11 @@
 	export let scene;
 	export let camera;
 	export let planet;
-
-	// let scene = new THREE.Scene();
-	// let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+	export let is_comparing;
 </script>
 
 {#if planet.ismodel}
-	<PlanetFromModel {planet} three={THREE} {scene} {camera} />
+	<PlanetFromModel {is_comparing} {planet} three={THREE} {scene} {camera} />
 {:else}
-	<Planet {planet} three={THREE} {scene} {camera} />
+	<Planet {is_comparing} {planet} three={THREE} {scene} {camera} />
 {/if}
