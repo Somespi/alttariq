@@ -57,7 +57,7 @@
 </div>
 <div class="flex h-screen w-screen flex-col">
 	<div class="top-0 w-full flex-row justify-around">
-		<h1 class="p-3">At-Tariq Explorer</h1>
+		<h1 class="p-3">At-Tariq Exo</h1>
 	</div>
 	<div class="flex flex-1 flex-col content-center items-center justify-center">
 		<div class="flex flex-col gap-y-16">

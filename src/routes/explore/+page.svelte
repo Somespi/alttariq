@@ -267,7 +267,11 @@
 {#if !is_loaded}
 	Loading...
 {:else if id == -1}
-	<SkyView {scene} {camera} {planets} {onPlanetClick} />
+	
+<SkyView {scene} {camera} {planets} {onPlanetClick} />
+	<button class="btn btn-outline btn-primary btn-sm absolute w-auto p-2 top-5 left-5" on:click={() => goto('/')}>
+		Back to Homepage
+	</button>
 {:else}
 	<div class="flex h-screen w-full flex-row">
 		<div class="absolute m-5 w-auto p-2">
@@ -295,7 +299,11 @@
 
 				<p class="mt-12 text-xs font-bold">Planet Overview</p>
 				<p id="small_desc_with_gai" class="text-sm leading-relaxed">
-					{@html highlight(displayed_overview)}
+					{#if overview == ''}
+						Generating...
+					{:else}
+						{@html highlight(displayed_overview)}
+					{/if}
 				</p>
 
 				<div class="2-full mt-12 grid h-64 grid-cols-2 grid-rows-2 gap-5">
@@ -350,7 +358,9 @@
 				</p>
 
 				<p id="details_desc_with_gai" class="text-sm leading-relaxed">
-					{#if displayed_tidy == ''}
+					{#if details == '' && displayed_tidy == ''}
+						Generating...
+					{:else if displayed_tidy == ''}
 						{@html highlight(displayed_details)}
 					{:else}
 						{@html highlight(displayed_tidy)}
