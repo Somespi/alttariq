@@ -230,8 +230,8 @@
 		displayed_prompt = '';
 		promptG = '';
 
-		//overviewGeneration(id);
-		//detailsGeneration(id);
+		overviewGeneration(id);
+		detailsGeneration(id);
 	};
 
 	const backToDiscovery = () => {
