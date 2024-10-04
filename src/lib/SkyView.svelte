@@ -255,8 +255,10 @@
 			if (pmremGenerator) pmremGenerator.dispose();
 			if (scene) scene = null;
 			if (camera) camera = null;
+			//@ts-ignore
 			if (renderer) renderer = null;
-			if (planeted) planeted = null;
+			//@ts-ignore
+			if (planets) planets = null;
 		});
 	}
 </script>

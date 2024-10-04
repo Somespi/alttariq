@@ -232,6 +232,7 @@
 
 		overviewGeneration(id);
 		detailsGeneration(id);
+		
 	};
 
 	const backToDiscovery = () => {
@@ -268,6 +269,10 @@
 			is_comparing = !is_comparing;
 		}
 	}
+
+	function luanchSimulation() {
+		window.open("https://vqr-87.github.io/At-tariq-simulation/?type=" + planets[id].type + "&gravity=" + planets[id].nasa_data.gravity, "_blank");
+	}
 </script>
 
 {#if !is_loaded}
@@ -279,11 +284,18 @@
 		Back to Homepage
 	</button>
 {:else}
+
 	<div class="flex h-screen w-full flex-row">
 		<div class="absolute m-5 w-auto p-2">
 			<button class="btn btn-outline btn-primary btn-sm" on:click={backToDiscovery}>
 				Back to Discovering
 			</button>
+
+			<button class="btn btn-outline btn-accent btn-sm" on:click={luanchSimulation}>
+				Launch Simulation
+			</button>
+
+			
 
 			<button class="btn {is_comparing ? '' : 'btn-outline'} btn-secondary btn-sm" on:click={() => compareToEarth(id)}>
 				{#if !is_comparing}
@@ -294,6 +306,7 @@
 			</button>
 		</div>
 		<div class=" h-full w-[63%] bg-slate-950">
+	
 			<DecidePlanet {is_comparing} {THREE} {scene} {camera} planet={planets[id]} />
 		</div>
 
