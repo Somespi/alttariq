@@ -63,7 +63,7 @@
 	};
 
 	const overviewGeneration = (id: number) => {
-		fetch('https://alttariq-api.vercel.app' + '/prompt', {
+		fetch('https://alttariq-30pt4gmpz-somespis-projects.vercel.app' + '/prompt', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -104,7 +104,7 @@
 	};
 
 	const detailsGeneration = (id: number) => {
-		fetch('https://alttariq-api.vercel.app' + '/prompt', {
+		fetch('https://alttariq-30pt4gmpz-somespis-projects.vercel.app' + '/prompt', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -145,7 +145,7 @@
 	};
 
 	const tidyUpDetails = () => {
-		fetch('https://alttariq-api.vercel.app' + '/prompt', {
+		fetch('https://alttariq-30pt4gmpz-somespis-projects.vercel.app' + '/prompt', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -180,7 +180,7 @@
 	};
 
 	const promptGeneration = (id: number) => {
-		fetch('https://alttariq-api.vercel.app' + '/prompt', {
+		fetch('https://alttariq-30pt4gmpz-somespis-projects.vercel.app' + '/prompt', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
